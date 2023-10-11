@@ -3,30 +3,34 @@
 </script>
 <template>
     <v-app class="white">
-        <v-app-bar color="white" elevation="0" elevate-on-scroll>
+        <v-app-bar color="white" elevation="0" style="border-bottom: 1px solid rgba(0, 0, 0, 0.12) ">
             <v-row class="ma-0">
-                <div class="text-h5 ml-5" @click="$router.push('/')">
+                <v-btn color="teal" class="text-h5 ml-5" @click="$router.push('/');">
                     <v-icon size="sm" icon="mdi-video-vintage" class="mb-2"></v-icon>
-                    Al<b class="text-black">Film</b>
-                </div>
+                    Al<b class="text-black">Films</b>
+                </v-btn>
 
-                <v-col></v-col>
+                <v-col class="pa-0"></v-col>
                 <v-text-field
                     v-model="c_search"
-                    variant="solo"
+                    color="teal"
+                    variant="outlined"
                     placeholder="Rechercher un film"
                     append-inner-icon="mdi-magnify"
                     rounded
                     clearable
                     density="compact"
                     dense
-                    hide-details>
+                    hide-details 
+                    @input="goHome" 
+                    @close="goHome"
+                    @click:clear="goHome">
                 </v-text-field>
-                <v-col></v-col>
+                <v-col class="pa-0"></v-col>
                 <v-btn v-if="!isAuthenticated"
-                       size="small"
                        :loading="isLoading"
-                       class="mr-4"
+                       color="black"
+                       class="bg-amber text-black mr-4 mt-1"
                        @click="login">
                     Se connecter
                 </v-btn>
@@ -40,11 +44,15 @@
         </v-app-bar>
         <v-main>
             <v-container :fluid="true" fill-height style="max-width: 1300px">
-                <router-view></router-view>
+                <v-scroll-x-transition hide-on-leave>
+                    <router-view></router-view>
+                </v-scroll-x-transition>
             </v-container>
         </v-main>
-        <v-footer :app="true">
-            <small>Application de Recherche de Films avec Vue 3 et TMDb API</small>
+        <v-footer class="mt-12" app>
+            <div class="text-center w-100">
+                <small>Application de Recherche de Films avec Vue 3 et TMDb API</small>
+            </div>
         </v-footer>
     </v-app>
 </template>
@@ -88,6 +96,14 @@
                     this.s_setFilms(newSearch);
                 }
             }
+        },
+        methods:{
+            goHome(){
+                if(this.$route.name !== 'films'){
+                    this.$router.replace({name: 'films'})
+                }
+            }
+            
         }
     }
 </script>

@@ -1,6 +1,8 @@
 ﻿<script setup>
     import {VSkeletonLoader} from 'vuetify/labs/VSkeletonLoader';
     import FilmCard from "@/components/FilmCard.vue";
+    import ActorDialog from "@/components/dialog.vue";
+    import ActorCard from "@/components/ActorCard.vue";
 </script>
 
 <template>
@@ -22,24 +24,31 @@
                 Aucun film trouvé :(
             </v-alert>
         </v-scroll-x-transition>
-
-
+        
         <!-- Film -->
         <v-scroll-x-transition hide-on-leave>
             <v-row v-if="s_status === 'loaded'">
                 <v-col v-for="(film, index) in c_filmsFiltered"
                        :key="'al-film-'+index" :cols="responsive">
                     <film-card :castings="film.castings"
-                               :description="film.description"
-                               :id="index"
+                               :id="film.id"
                                :note="film.note"
+                               :duration="film.duration"
                                :picture="film.picture"
-                               :out-date="film.date"
-                               :title="film.title">
+                               :date="film.date"
+                               :is-favorite="film.isFavorite"
+                               :title="film.title"
+                               :voteCount="film.voteCount"
+                                @open-actor-dialog="openActorDialog">
                     </film-card>
                 </v-col>
             </v-row>
         </v-scroll-x-transition>
+        <actor-dialog :dialog-model="actorDialog" 
+                      :title="actorSelected"
+                @close-dialog="actorDialog = false">
+            <actor-card :id="actorSelected"></actor-card>
+        </actor-dialog>
     </div>
 </template>
 
@@ -51,7 +60,10 @@
         data() {
             const filmStore = useFilmStore();
             return {
-                s_getFilms: filmStore.getFilms
+                s_getFilms: filmStore.getFilms,
+                s_getFilms2: filmStore.getFilms2,
+                actorDialog: false,
+                actorSelected: null
             }
         },
         computed: {
@@ -80,7 +92,13 @@
             }
         },
         mounted() {
-            this.s_getFilms();
+            this.s_getFilms2();
+        },
+        methods:{
+            openActorDialog(name){
+                this.actorSelected = name
+                this.actorDialog = true;
+            }
         }
     }
 </script>

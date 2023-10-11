@@ -2,6 +2,8 @@
 function authGuard(to, from, next) {
     const auth0 = useAuth0();
     const isAuthenticated = auth0.isAuthenticated.value;
+    const isLoading = auth0.isLoading;
+    
     if(isAuthenticated){
         next();
     }else{
@@ -9,5 +11,4 @@ function authGuard(to, from, next) {
         next("/");
     }
 }
-
 export default authGuard;

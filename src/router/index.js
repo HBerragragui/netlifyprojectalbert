@@ -14,7 +14,7 @@ const router = createRouter({
       component: Films
     },
     {
-      path: '/detail-film/:id',
+      path: '/detail-film/:title/:id',
       name: 'detailFilm',
       component: DetailFilm,
       beforeEnter: AuthGuard
